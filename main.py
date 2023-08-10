@@ -4,13 +4,6 @@ import pandas as pd
 
 survey = ss.StreamlitSurvey()
 
-#[theme]
-#primaryColor="#F63366"
-#backgroundColor="#FFFFFF"
-#secondaryBackgroundColor="#F0F2F6"
-#textColor="#262730"
-#font="sans serif"
-
 
 st.title("Survey for Informative Priors")
 st.write("This survey draft is realized with Python's Streamlit package by Sara Gironi. It is based on the paper ***Bayesian Impact Evaluation with Informative Priors*** by Leonardo Iacovone, David McKenzie and Rachael Meager.")
