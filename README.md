@@ -1,1 +1,1 @@
-# survey_informative_priors
+# Academic Prior Beliefs Elicitation
