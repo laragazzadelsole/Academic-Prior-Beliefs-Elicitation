@@ -1,1 +1,1 @@
-# survey_informative_priors
+# Test branch for Academic Prior Beliefs Elicitation 
