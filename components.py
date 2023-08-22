@@ -1,6 +1,7 @@
 import streamlit as st
 from utils import *
 
+
 def consent_form():
     placeholder = st.empty()
     with placeholder.container():
@@ -13,6 +14,7 @@ def consent_form():
                 st.markdown("You have consented. Select \"Next\" to start the survey.")
                 st.button('Next', on_click=add_consent)
 
+'''
 def percentage_of_expected_impact(export_impact):
     if export_impact == "Positive":
         st.slider(PERC_EXPECTED_IMPACT_DESCRIPTION.format("increase"), 0, 100, format = '%d', key = 'percentage_of_expected_impact')
@@ -31,5 +33,5 @@ def probability_of_expected_impact(export_impact):
 
 def motivation():
     st.text_input("Please shortly summarize the reasons for your previous answer:", key = 'motivation_text')
-
+'''
      

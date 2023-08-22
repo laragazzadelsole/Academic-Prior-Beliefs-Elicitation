@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from utils import *
 from components import *
-from st_aggrid import AgGrid
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
 
 survey = ss.StreamlitSurvey()
@@ -15,8 +15,7 @@ initialize_session_state()
 # Show introductory texts
 show_titles_and_subtitles()
 
-df = pd.DataFrame()
-
+# Request of consent
 consent_form()
 
 if st.session_state['consent']:
@@ -25,7 +24,8 @@ if st.session_state['consent']:
 
     first_question_grid()
 
-    st.number_input(SUBTITLE_QUESTION_1_2, min_value=0, max_value=100)
+    st.write(SUBTITLE_QUESTION_1_2)
+    st.number_input('', min_value=0, max_value=100)
     # Professional Category Checkbox
     #st.selectbox('Specify your professional category:', ('Policymaker', 'Expert', 'Firm'), key="professional_category")
     

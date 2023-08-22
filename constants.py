@@ -24,5 +24,5 @@ For example, if you think there is a 40 percent chance the intervention will inc
 '''
 
 SUBTITLE_QUESTION_1_2 = '''
-What would be the minimum effect size you would want to see in order to consider scaling up this program to more firms? \\
-(Express your answer in terms of number of additional products, e.g. if you would want the 3.4  product average to increase to at least 4.4, you should give 1 as your answer).'''
+**2.2 What would be the minimum effect size you would want to see in order to consider scaling up this program to more firms?** \\
+_Express your answer in terms of number of additional products, e.g. if you would want the 3.4  product average to increase to at least 4.4, you should give 1 as your answer._'''
