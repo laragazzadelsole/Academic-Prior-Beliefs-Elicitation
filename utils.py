@@ -1,5 +1,6 @@
 
 import streamlit as st
+import time
 from constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,9 +10,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
-# Uncomment if you want to create a new spreadsheet each time 
-#testsheet = client.create('Test')
-#testsheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
+
 
 
 # CONSENT PAGE
@@ -107,11 +106,12 @@ def first_question_grid():
     plt.tight_layout()
     st.pyplot(fig)
 
-    new_bins_df = pd.DataFrame(new_bins_df)
+    new_bins_df = pd.DataFrame(new_bins_df.T)
     #new_bins_df.to_csv('Export beliefs.csv', index=False)
 
+    return new_bins_df
 
-def add_submission():
+def add_submission(new_bins_df):
     st.session_state['submit'] = True 
 
     #data = st.session_state['data']
@@ -129,21 +129,22 @@ def add_submission():
     #df = pd.DataFrame(data)
 
     #save data to google sheet 
-    #scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
-    #creds = ServiceAccountCredentials.from_json_keyfile_name('prior-beliefs-elicitation-keys.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name('prior-beliefs-elicitation-keys.json', scope)
 
-    #client = gspread.authorize(creds)
+    client = gspread.authorize(creds)
 
     # Load the Google Sheet
-    #sheet = client.open("Academic Prior Beliefs Elicitation Data").sheet1
+    sheet = client.open("Academic Prior Beliefs Elicitation Data").sheet1
 
-    #sheet = sheet.append_rows(df.values.tolist())
-
-    #sheet_update = sheet.update([df.columns.values.tolist()])
+    #sheet_update = sheet.update([new_bins_df.columns.values.tolist()])
+    sheet = sheet.append_rows([new_bins_df.values.tolist()[1]])
     #st.success('Data has been saved successfully.')
 
-    
+    #Navigate to the folder in Google Drive. Copy the Folder ID found in the URL. This is everything that comes after “folder/” in the URL. For example, if the URL was
+    backup_sheet = client.create(f'Backup_{time.now()}', folder_id = '')
+    backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
 
     #CANCELLARE
     
