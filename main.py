@@ -10,7 +10,7 @@ survey = ss.StreamlitSurvey()
 
 
 # Initialize session state
-initialize_session_state()
+#initialize_session_state()
 
 # Show introductory texts
 show_titles_and_subtitles()
@@ -19,13 +19,13 @@ show_titles_and_subtitles()
 consent_form()
 
 if st.session_state['consent']:
-
+    
     first_question()
 
     first_question_grid()
 
     st.write(SUBTITLE_QUESTION_1_2)
-    st.number_input('', min_value=0, max_value=100)
+    st.number_input('', min_value=0, max_value=100, key = 'input_question_1')
     # Professional Category Checkbox
     #st.selectbox('Specify your professional category:', ('Policymaker', 'Expert', 'Firm'), key="professional_category")
     
@@ -41,5 +41,5 @@ if st.session_state['consent']:
     submit = st.button("Submit", on_click = add_submission)
 
     if st.session_state['submit']:
-        st.success("You completed the form successfully!")
+        st.success("thank you for completing the Academic Prior Elicitation Survey!")
 

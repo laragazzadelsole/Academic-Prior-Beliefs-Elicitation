@@ -8,15 +8,7 @@ from google.oauth2 import service_account
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
-from shillelagh.backends.apsw.db import connect
 
-connection = connect(":memory:",
-                     adapter_kwargs = {
-                            "gsheetsapi": { 
-                            "service_account_info":  st.secrets["gcp_service_account"] 
-                                    }
-                                        }
-                        )
 # Uncomment if you want to create a new spreadsheet each time 
 #testsheet = client.create('Test')
 #testsheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
@@ -30,13 +22,14 @@ def show_titles_and_subtitles():
     st.write(SUBTITLE_2)
     st.write(SUBTITLE_3)
 
+
 def initialize_session_state():
     if 'key' not in st.session_state:
         st.session_state['key'] = 'value'
         st.session_state['consent'] = False
         st.session_state['submit'] = False
         st.session_state['No answer'] = ''
-    
+       
     if 'data' not in st.session_state:
         st.session_state['data'] = {
             'Minimum Effect Size': []
@@ -60,7 +53,7 @@ def first_question():
 
 def first_question_grid():
     bins_df = pd.read_excel('Probability Bins.xlsx', header = 0)
-
+    
     # set only one column to be editable 
     grid_options = {
         "columnDefs": [
@@ -115,30 +108,46 @@ def first_question_grid():
     st.pyplot(fig)
 
     new_bins_df = pd.DataFrame(new_bins_df)
-    new_bins_df.to_csv('Export beliefs.csv', index=False)
+    #new_bins_df.to_csv('Export beliefs.csv', index=False)
 
 
 def add_submission():
     st.session_state['submit'] = True 
 
-    data = st.session_state['data']
-    data['Minimum Effect Size'].append(safe_var('minimum_effect_size'))
+    #data = st.session_state['data']
+    
+    #data['Probability'].append(safe_var('probability'))
+    #data['Percentage'].append(safe_var('percentage'))
+    #data['Minimum Effect Size'].append(safe_var('input_question_1'))
     #data['Prior on the program\'s impact'].append(safe_var('export_impact'))
     #data['Effects of the impact'].append(safe_var('export_outcome'))
     #data['Probability of expected impact'].append(safe_var('probability_of_expected_impact'))
     #data['Percentage of expected impact'].append(safe_var('percentage_of_expected_impact'))
     #data['Motivation'].append(safe_var('motivation_text'))
             
-    st.session_state['data'] = data
+    #st.session_state['data'] = data
     #df = pd.DataFrame(data)
-    #df.to_csv('Results.csv', index=False)
 
+    #save data to google sheet 
+    #scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
+    #creds = ServiceAccountCredentials.from_json_keyfile_name('prior-beliefs-elicitation-keys.json', scope)
+
+    #client = gspread.authorize(creds)
+
+    # Load the Google Sheet
+    #sheet = client.open("Academic Prior Beliefs Elicitation Data").sheet1
+
+    #sheet = sheet.append_rows(df.values.tolist())
+
+    #sheet_update = sheet.update([df.columns.values.tolist()])
+    #st.success('Data has been saved successfully.')
+
+    
+
+    #CANCELLARE
+    
 #Save the data in the spreadsheet in drive named 'Academic Prior Beliefs Elicitation Data'
-
-scope = ['https://www.googlseapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-
-
 def secrets_to_json():
     return {
         "type": st.secrets["gcp_service_account"]["type"],
@@ -154,8 +163,11 @@ def secrets_to_json():
         "universe_domain": st.secrets["universe_domain"]
     }
 
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(secrets_to_json())
-    
+
+
+
+
+
 #client = gspread.authorize(credentials)
 
 #sheet = client.open('Academic Prior Beliefs Elicitation Data').sheet1
