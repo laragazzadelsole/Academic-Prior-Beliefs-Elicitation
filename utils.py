@@ -114,12 +114,13 @@ def add_submission(new_bins_df):
     
     # Update session state
     data = st.session_state['data']
-    
-    data['Minimum Effect Size'].append(safe_var('input_question_1'))
+    MIN_EFF_SIZE = 'Minimum Effect Size'
+
+    data[MIN_EFF_SIZE].append(safe_var('input_question_1'))
             
     st.session_state['data'] = data
     minimum_effect_df = pd.DataFrame(data)
-    new_bins_df['Minimum Effect Size'] =  data
+    new_bins_df[MIN_EFF_SIZE] =  [MIN_EFF_SIZE, data[MIN_EFF_SIZE][0]]
     #final_df = pd.concat([new_bins_df, minimum_effect_df], axis=1)
     st.write(minimum_effect_df)
     st.write(new_bins_df)
@@ -137,10 +138,10 @@ def add_submission(new_bins_df):
     #sheet_update = sheet.update([new_bins_df.columns.values.tolist()])
     sheet = sheet.append_rows([new_bins_df.values.tolist()[1]])
     #st.success('Data has been saved successfully.')
-
+    
     #Navigate to the folder in Google Drive. Copy the Folder ID found in the URL. This is everything that comes after “folder/” in the URL. For example, if the URL was
-    #backup_sheet = client.create(f'Backup_{datetime.now()}', folder_id='1Pjz6JAf9MaVe_eSaAFpDhLFr4GMPj2jX').sheet1
-    #backup_sheet = backup_sheet.append_rows(new_bins_df.iloc[:2].values.tolist())
+    backup_sheet = client.create(f'Backup_{datetime.now()}', folder_id='1Pjz6JAf9MaVe_eSaAFpDhLFr4GMPj2jX').sheet1
+    backup_sheet = backup_sheet.append_rows(new_bins_df.iloc[:2].values.tolist())
     #backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
     
     #CANCELLARE
