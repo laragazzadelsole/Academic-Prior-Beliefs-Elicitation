@@ -1,6 +1,6 @@
 
 import streamlit as st
-import time
+from datetime import datetime
 from constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,9 +9,6 @@ from google.oauth2 import service_account
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
-
-
-
 
 # CONSENT PAGE
 
@@ -111,22 +108,21 @@ def first_question_grid():
 
     return new_bins_df
 
+
 def add_submission(new_bins_df):
     st.session_state['submit'] = True 
-
-    #data = st.session_state['data']
     
-    #data['Probability'].append(safe_var('probability'))
-    #data['Percentage'].append(safe_var('percentage'))
-    #data['Minimum Effect Size'].append(safe_var('input_question_1'))
-    #data['Prior on the program\'s impact'].append(safe_var('export_impact'))
-    #data['Effects of the impact'].append(safe_var('export_outcome'))
-    #data['Probability of expected impact'].append(safe_var('probability_of_expected_impact'))
-    #data['Percentage of expected impact'].append(safe_var('percentage_of_expected_impact'))
-    #data['Motivation'].append(safe_var('motivation_text'))
+    # Update session state
+    data = st.session_state['data']
+    
+    data['Minimum Effect Size'].append(safe_var('input_question_1'))
             
-    #st.session_state['data'] = data
-    #df = pd.DataFrame(data)
+    st.session_state['data'] = data
+    minimum_effect_df = pd.DataFrame(data)
+    new_bins_df['Minimum Effect Size'] =  data
+    #final_df = pd.concat([new_bins_df, minimum_effect_df], axis=1)
+    st.write(minimum_effect_df)
+    st.write(new_bins_df)
 
     #save data to google sheet 
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
@@ -143,9 +139,10 @@ def add_submission(new_bins_df):
     #st.success('Data has been saved successfully.')
 
     #Navigate to the folder in Google Drive. Copy the Folder ID found in the URL. This is everything that comes after “folder/” in the URL. For example, if the URL was
-    backup_sheet = client.create(f'Backup_{time.now()}', folder_id = '')
-    backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
-
+    #backup_sheet = client.create(f'Backup_{datetime.now()}', folder_id='1Pjz6JAf9MaVe_eSaAFpDhLFr4GMPj2jX').sheet1
+    #backup_sheet = backup_sheet.append_rows(new_bins_df.iloc[:2].values.tolist())
+    #backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
+    
     #CANCELLARE
     
 #Save the data in the spreadsheet in drive named 'Academic Prior Beliefs Elicitation Data'
