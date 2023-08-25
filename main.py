@@ -5,7 +5,7 @@ from utils import *
 from components import *
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
-
+st.set_page_config(layout="wide")
 survey = ss.StreamlitSurvey()
 
 
@@ -19,16 +19,19 @@ show_titles_and_subtitles()
 consent_form()
 
 if st.session_state['consent']:
-    
+
+    personal_information()
+
     first_question()
 
-    new_bins_df = first_question_grid()
+    new_bins_df, fig, bins_grid = first_question_grid()
+
+    #table_graph_position(bins_grid, fig)
 
     st.write(SUBTITLE_QUESTION_1_2)
-    st.number_input('', min_value=0, max_value=100, key = 'input_question_1')
+    st.number_input('Click to increase or decrease the counter.', min_value=0, max_value=100, key = 'input_question_1')
     
-    # Professional Category Checkbox
-    #st.selectbox('Specify your professional category:', ('Policymaker', 'Expert', 'Firm'), key="professional_category")
+
     
     #st.radio(EXPORT_IMPACT_DESCRIPTION, options=["Positive", "Negative", "No changes"], horizontal=False, key = 'export_impact')
 
@@ -44,5 +47,5 @@ if st.session_state['consent']:
 
     if st.session_state['submit']:
         
-        st.success("Thank you for completing the Academic Prior Elicitation Survey!")
+        st.success("Thank you for completing the Academic Prior Beliefs Elicitation Survey!")
 

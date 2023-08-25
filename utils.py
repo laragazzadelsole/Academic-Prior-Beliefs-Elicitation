@@ -9,6 +9,7 @@ from google.oauth2 import service_account
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
+import streamlit.components.v1 as components
 
 # CONSENT PAGE
 
@@ -28,7 +29,10 @@ def initialize_session_state():
        
     if 'data' not in st.session_state:
         st.session_state['data'] = {
-            'Minimum Effect Size': []
+            'Minimum Effect Size': [],
+            'User Full Name': [],
+            'User Working Position': [],
+            'User Professional Category': []
         }
     
 def safe_var(key):
@@ -49,65 +53,66 @@ def first_question():
 
 def first_question_grid():
     st.write('BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT')
-    bins_df = pd.read_excel('Probability Bins.xlsx', header = 0)
-    
-    # set only one column to be editable 
-    grid_options = {
-        "columnDefs": [
-            {
-                "headerName": "Probability",
-                "field": "Probability",
-                "editable": False
-            },
-            {
-                "headerName": "Percentage",
-                "field": "Percentage",
-                "editable": True
-            }
-        ]
-    }
 
-    # Initialize the counter
-    total_percentage = 100
-    hist_data = bins_df['Percentage']
+    bins_df = pd.read_excel('Probability Bins.xlsx', header = 0)
     bins = bins_df['Probability']
 
-    grid_return = AgGrid(bins_df, grid_options, fit_columns_on_grid_load = True, update_mode=GridUpdateMode.VALUE_CHANGED)
-    new_bins_df = grid_return["data"]
 
-    # Calculate the new total sum
-    percentage_inserted = sum(new_bins_df['Percentage'])
-    # Calculate the difference in sum
-    percentage_difference = total_percentage - percentage_inserted
+    data_container = st.container()
 
-    # Update the counter
-    total_percentage = percentage_difference
+    with data_container:
+        table, plot = st.columns(2)
+        with table:
 
-    hist_data = new_bins_df['Percentage']
-    # Display the counter
+            # Set up Ag-Grid options
+            gb = GridOptionsBuilder()
+            gb.configure_column("Probability", editable=False, resizable=True)
+            gb.configure_column("Percentage", editable=True, resizable=True)
 
-    if percentage_difference >= 0:
-        st.write(f"**You still have to allocate {percentage_difference} percent probability.**")
-    else:
-        st.write(f'**:red[You have inserted {abs(percentage_difference)} percent more, please review your percentage distribution.]**')
+            # Initialize Ag-Grid
+            grid_return = AgGrid(bins_df, gridOptions=gb.build(), height=400, fit_columns_on_grid_load = True, update_mode=GridUpdateMode.VALUE_CHANGED)
 
-    
-    # Display the distribution of probabilities with a bar chart 
-    
-    fig, ax = plt.subplots()
-    ax.bar(bins, new_bins_df['Percentage'])
-    ax.set_xlabel('Probability Bins')
-    ax.set_ylabel('Percentage of Beliefs')
-    ax.set_title('Distribution of Beliefs about the Impact on the Number of Products that Firms Export')
-    ax.set_xticks(bins)
-    ax.set_xticklabels(bins, rotation=80)
-    plt.tight_layout()
-    st.pyplot(fig)
+            # Get the modified data from Ag-Grid
+            bins_grid = grid_return["data"]
+            #st_aggrid(bins_grid, height=400, fit_columns_on_grid_load=True)
+            #components.html(grid_return["data"].to_html(escape=False), height=400, scrolling=True)
 
-    new_bins_df = pd.DataFrame(new_bins_df.T)
+
+            # Initialize the counter
+            total_percentage = 100
+            # Calculate the new total sum
+            percentage_inserted = sum(bins_grid['Percentage'])
+            # Calculate the difference in sum
+            percentage_difference = total_percentage - percentage_inserted
+
+            # Update the counter
+            total_percentage = percentage_difference
+
+        
+            # Display the counter
+
+            if percentage_difference >= 0:
+                st.write(f"**You still have to allocate {percentage_difference} percent probability.**")
+            else:
+                st.write(f'**:red[You have inserted {abs(percentage_difference)} percent more, please review your percentage distribution.]**')
+
+        with plot:
+        # Display the distribution of probabilities with a bar chart 
+        
+            fig, ax = plt.subplots()
+            ax.bar(bins, bins_grid['Percentage'])
+            ax.set_xlabel('Probability Bins')
+            ax.set_ylabel('Percentage of Beliefs')
+            ax.set_title('Distribution of Beliefs about the Impact on the Number of Products that Firms Export')
+            ax.set_xticks(bins)
+            ax.set_xticklabels(bins, rotation=80)
+            plt.tight_layout()
+            st.pyplot(fig, use_container_width=True)
+
+    new_bins_df = pd.DataFrame(bins_grid.T)
     #new_bins_df.to_csv('Export beliefs.csv', index=False)
 
-    return new_bins_df
+    return new_bins_df, fig, bins_grid
 
 
 def add_submission(new_bins_df):
@@ -115,16 +120,29 @@ def add_submission(new_bins_df):
     
     # Update session state
     data = st.session_state['data']
+
+    USER_FULL_NAME = 'User Full Name'
+    USER_PROF_CATEGORY = 'User Professional Category'
+    USER_POSITION = 'User Working Position'
     MIN_EFF_SIZE = 'Minimum Effect Size'
 
     data[MIN_EFF_SIZE].append(safe_var('input_question_1'))
+    data[USER_FULL_NAME].append(safe_var('user_full_name'))
+    data[USER_POSITION].append(safe_var('user_position'))
+    data[USER_PROF_CATEGORY].append(safe_var('professional_category'))
             
     st.session_state['data'] = data
-    minimum_effect_df = pd.DataFrame(data)
+    session_state_df = pd.DataFrame(data)
     new_bins_df[MIN_EFF_SIZE] =  [MIN_EFF_SIZE, data[MIN_EFF_SIZE][0]]
-    #final_df = pd.concat([new_bins_df, minimum_effect_df], axis=1)
-    st.write(minimum_effect_df)
-    st.write(new_bins_df)
+    new_bins_df[USER_FULL_NAME] = [USER_FULL_NAME, data[USER_FULL_NAME][0]]
+    new_bins_df[USER_POSITION] = [USER_POSITION, data[USER_POSITION][0]]
+    new_bins_df[USER_PROF_CATEGORY] = [USER_PROF_CATEGORY, data[USER_PROF_CATEGORY][0]]
+
+    # Reorder the columns
+    last_columns = new_bins_df.iloc[:, -3:]
+    first_columns = new_bins_df.iloc[:, :-3]
+
+    new_bins_df = pd.concat([last_columns, first_columns], axis=1)
 
     #save data to google sheet 
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
@@ -145,40 +163,5 @@ def add_submission(new_bins_df):
     backup_sheet = backup_sheet.append_rows(new_bins_df.iloc[:2].values.tolist())
     #backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
     
-    #CANCELLARE
-    
-#Save the data in the spreadsheet in drive named 'Academic Prior Beliefs Elicitation Data'
-def secrets_to_json():
-    return {
-        "type": st.secrets["gcp_service_account"]["type"],
-        "project_id": st.secrets["project_id"],
-        "private_key_id": st.secrets["private_key_id"],
-        "private_key": st.secrets["private_key"],
-        "client_email": st.secrets["client_email"],
-        "client_id": st.secrets["client_id"],
-        "auth_uri": st.secrets["auth_uri"],
-        "token_uri": st.secrets["token_uri"],
-        "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
-        "client_x509_cert_url": st.secrets["client_x509_cert_url"],
-        "universe_domain": st.secrets["universe_domain"]
-    }
-
-
-
-
-
-
-#client = gspread.authorize(credentials)
-
-#sheet = client.open('Academic Prior Beliefs Elicitation Data').sheet1
-#sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
-#sheet_updated = sheet.update([first_question_grid().columns.values.tolist()])
-#sheet = sheet.append_rows(first_question_grid().values.tolist())
-
-    # Failures to append data to the same file 
-
-    #sheet_updated = sheet.update([df.columns.values.tolist()])
-    #new_val = df.values.tolist()
-    #sheet_updated.append_row(new_val, value_input_option='RAW')
 
     
