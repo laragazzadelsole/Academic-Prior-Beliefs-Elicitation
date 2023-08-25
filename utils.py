@@ -48,6 +48,7 @@ def first_question():
 
 
 def first_question_grid():
+    st.write('BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT')
     bins_df = pd.read_excel('Probability Bins.xlsx', header = 0)
     
     # set only one column to be editable 
@@ -96,8 +97,8 @@ def first_question_grid():
     fig, ax = plt.subplots()
     ax.bar(bins, new_bins_df['Percentage'])
     ax.set_xlabel('Probability Bins')
-    ax.set_ylabel('Percentage')
-    ax.set_title('Bar Chart of Percentage Values')
+    ax.set_ylabel('Percentage of Beliefs')
+    ax.set_title('Distribution of Beliefs about the Impact on the Number of Products that Firms Export')
     ax.set_xticks(bins)
     ax.set_xticklabels(bins, rotation=80)
     plt.tight_layout()

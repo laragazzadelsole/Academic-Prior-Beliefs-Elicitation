@@ -3,7 +3,24 @@ TITLE = "ACADEMIC PRIOR BELIEFS ELICITATION"
 SUBTITLE_1 = """This survey draft is realized with Python's Streamlit package by Sara Gironi. 
             """
 SUBTITLE_2 = """ The Colombia Productiva program aims to broaden the range of firms and sectors that engage in exporting, and aims to do so through improvements 
-in the management practices through high-intensity technical assistance to small and medium enterprises (SMEs).
+in the management practices through high-intensity technical assistance to small and medium enterprises (SMEs). 
+Firms first receive a visit from a consultant who provides a diagnostic analysis of the business, and recommendations for improvements in five areas:
+ quality (getting products to the standard needed for international markets), productivity (methods to reduce production costs), labor productivity 
+ (a focus on managing workers to make them more productive), commercial strategy (with a focus on sales strategy and accessing export markets), and
+   energy efficiency  (to reduce energy costs of production). \\
+    They then receive up to 190 hours of technical assistance delivered over 10 months: 30 hours directed towards general commercial strategy, 
+    and 160 hours towards the two of the other four areas in which they have the more room to improve. The final phase is a trade fair (macrorrueda de negocios) 
+    organized by ProColombia designed to enable firms to obtain meetings with international buyers, primarily from countries with which Colombia has free trade agreements.
+     The program is estimated to have a market value of 40 million Colombian Pesos per firm (approximately US\$ 13,800), with small firms having to pay 3 million COP 
+     (US\$ 1035), and medium and large firms 6 million COP (US\$ 2070). \\
+     \\
+     100 firms (Benefits 2 group) have been selected to receive the full version of this program, and another 100 firms (Benefits 1 group) have been selected 
+     to receive the diagnostic phase and attend the trade fair, without receiving the 190 hours of technical assistance. \\
+The firms have been in existence for a median of 18 years, with 58 percent of them having exported at all in the last three years. 
+At the time of application, firms are doing 36 percent of a list of basic export practices. \\
+Firms have a mean of 73 and median of 42 employees, and come from 14 different sectors - the most common being textiles (18%), construction (16%), 
+transportation equipment (14%), plastics and paint products (13%), and processed food (10%). \\
+\\
     The scope of this survey is to record informative priors of different categories of actors: policymakers, experts and firms, in order to incorporate
 them in Bayesian impact evaluation, which is particularly helpful to learn more from expensive new programs tested on relatively small samples."""
 SUBTITLE_3 = "The following questions regard the priors on the Colombia Productiva Program."
