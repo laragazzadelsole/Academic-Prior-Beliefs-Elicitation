@@ -8,7 +8,7 @@ import seaborn as sns
 from google.oauth2 import service_account
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode, JsCode
 import streamlit.components.v1 as components
 
 # CONSENT PAGE
@@ -46,9 +46,63 @@ def add_consent():
 
 # BEGINNING OF THE SURVEY
 
+def instructions():
+    st.subheader(TITLE_INSTRUCTIONS)
+    st.write(SUBTITLE_INSTRUCTIONS)
+
+def instructions_table():
+
+# Create some example data
+    data_container = st.container()
+
+    with data_container:
+        table, plot = st.columns(2)
+        with table:
+            # Create Streamlit app
+            st.subheader("Temperature Forecast Tomorrow in Your City")
+
+            # Define Ag-Grid options
+            gb = GridOptionsBuilder()
+            gb.configure_column("Temperature", editable=False, resizable=True)
+            gb.configure_column("Probability", editable=False, resizable=True)
+
+            # Create some example data as a Pandas DataFrame
+            values_column = list(range(10, 31))
+            zeros_column = [0 for _ in values_column]
+            data = {'Temperature': values_column, 'Probability': zeros_column}
+            df = pd.DataFrame(data)
+
+            df.at[0, "Temperature"] = '< 10'
+            df.at[20, "Temperature"] = '> 30'
+            df.at[13, "Probability"] = 5
+            df.at[14, "Probability"] = 15
+            df.at[15, "Probability"] = 45
+            df.at[16, "Probability"] = 20
+            df.at[17, "Probability"] = 15
+
+            df['Temperature'] = df['Temperature'].astype('str')
+
+
+            # Initialize Ag-Grid
+            grid_return = AgGrid(df, gridOptions=gb.build(), height=400, fit_columns_on_grid_load=True)
+            bins_grid = grid_return["data"]
+        with plot:
+        # Display the distribution of probabilities with a bar chart 
+        
+            fig, ax = plt.subplots()
+            ax.bar(bins_grid['Temperature'], bins_grid['Probability'])
+            ax.set_xlabel('Temperature')
+            ax.set_ylabel('Probability')
+            ax.set_title('Probability Distribution over Tomorrow\'s Temperatures')
+            plt.tight_layout()
+            st.pyplot(fig, use_container_width=True)
+
+    st.write(CAPTION_INSTRUCTIONS)
+
 def first_question():
     st.subheader(TITLE_QUESTION_1)
     st.write(SUBTITLE_QUESTION_1)
+
 
 
 def first_question_grid():
@@ -75,8 +129,6 @@ def first_question_grid():
             # Get the modified data from Ag-Grid
             bins_grid = grid_return["data"]
             #st_aggrid(bins_grid, height=400, fit_columns_on_grid_load=True)
-            #components.html(grid_return["data"].to_html(escape=False), height=400, scrolling=True)
-
 
             # Initialize the counter
             total_percentage = 100

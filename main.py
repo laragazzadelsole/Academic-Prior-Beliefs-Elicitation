@@ -22,6 +22,10 @@ if st.session_state['consent']:
 
     personal_information()
 
+    instructions()
+
+    instructions_table()
+
     first_question()
 
     new_bins_df, fig, bins_grid = first_question_grid()

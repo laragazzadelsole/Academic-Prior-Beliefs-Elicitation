@@ -25,11 +25,21 @@ transportation equipment (14%), plastics and paint products (13%), and processed
 them in Bayesian impact evaluation, which is particularly helpful to learn more from expensive new programs tested on relatively small samples."""
 SUBTITLE_3 = "The following questions regard the priors on the Colombia Productiva Program."
 
-EXPORT_IMPACT_DESCRIPTION = "Express your beliefs regarding the impact of the consulting programm on export for the firms offered the treatment compared to firms offered just the diagnostic phase and trade:"
+#EXPORT_IMPACT_DESCRIPTION = "Express your beliefs regarding the impact of the consulting programm on export for the firms offered the treatment compared to firms offered just the diagnostic phase and trade:"
 
-PERC_EXPECTED_IMPACT_DESCRIPTION = "Choose what percentage on average do you think the export is going to {} in the treated firms:"
+#PERC_EXPECTED_IMPACT_DESCRIPTION = "Choose what percentage on average do you think the export is going to {} in the treated firms:"
 
-PROB_EXPECTED_IMPACT_DESCRIPTION = "Choose with what probability on average do you think the export {} in the treated firms:"
+#PROB_EXPECTED_IMPACT_DESCRIPTION = "Choose with what probability on average do you think the export {} in the treated firms:"
+
+TITLE_INSTRUCTIONS = '''1. Instructions'''
+
+SUBTITLE_INSTRUCTIONS = '''We are interested in learning what you expect the effects of being offered the full Colombia Productiva program are for these firms. \\
+For each of the questions, you have to allocate probabilities to different intervals, based on the probability that you think a specific event will happen. You cannot allocate more than 100\%. \\
+      As an example, suppose I ask your beliefs of what is going to be the max temperature in Celsius degrees in your city/town tomorrow, it's summer and the weather forecast predicts heavy rain in the morning. 
+      
+    '''
+CAPTION_INSTRUCTIONS = '''As illustrated in the table, you predicted that there's a 45\% chance of having 25 Celsius degrees, 20% chance of having 26 Celsius degrees and so on. \\
+   The bar graph shows the distribution of the probabilities assigned to the different temperatures.  '''
 
 TITLE_QUESTION_1 = '2.	Impact on the Number of Different Products Exported in the Year After the Intervention Begins'
 
