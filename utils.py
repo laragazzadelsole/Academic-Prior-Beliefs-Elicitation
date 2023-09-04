@@ -10,6 +10,8 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode, JsCode
 import streamlit.components.v1 as components
+import requests
+import io
 
 # CONSENT PAGE
 
@@ -108,7 +110,17 @@ def first_question():
 def first_question_grid():
     st.write('BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT')
 
-    bins_df = pd.read_excel('Probability Bins.xlsx', header = 0)
+        
+    # Downloading the csv file from your GitHub account
+
+    url = "https://raw.githubusercontent.com/laragazzadelsole/Academic-Prior-Beliefs-Elicitation/dev/probability_bins.csv" # Make sure the url is the raw version of the file on GitHub
+    download = requests.get(url).content
+
+    # Reading the downloaded content and turning it into a pandas dataframe
+
+    bins_df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+    #bins_df = pd.read_csv('probability_bins.csv', header = 0)
+    
     bins = bins_df['Probability']
 
 
@@ -162,7 +174,7 @@ def first_question_grid():
             st.pyplot(fig, use_container_width=True)
 
     new_bins_df = pd.DataFrame(bins_grid.T)
-    #new_bins_df.to_csv('Export beliefs.csv', index=False)
+
 
     return new_bins_df, fig, bins_grid
 
