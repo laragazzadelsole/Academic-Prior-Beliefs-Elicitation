@@ -33,7 +33,7 @@ if st.session_state['consent']:
     #table_graph_position(bins_grid, fig)
 
     st.write(SUBTITLE_QUESTION_1_2)
-    st.number_input('Click to increase or decrease the counter.', min_value=0, max_value=100, key = 'input_question_1')
+    st.number_input('Click to increase or decrease the counter.', min_value=0, max_value=10000, key = 'input_question_1')
     
 
     

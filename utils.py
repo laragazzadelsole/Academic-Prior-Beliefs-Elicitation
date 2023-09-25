@@ -4,6 +4,7 @@ from datetime import datetime
 from constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 import seaborn as sns
 from google.oauth2 import service_account
 import gspread
@@ -74,7 +75,7 @@ def instructions_table():
     data_container = st.container()
 
     with data_container:
-        table, plot = st.columns(2)
+        table, plot = st.columns([0.4, 0.6], gap = "large")
         with table:
             # Create Streamlit app
             st.subheader("Temperature Forecast Tomorrow in Your City")
@@ -106,15 +107,42 @@ def instructions_table():
             bins_grid = grid_return["data"]
         with plot:
         # Display the distribution of probabilities with a bar chart 
-        
+            fig, ax = plt.subplots(figsize=(4, 3))  # Adjust the figure size as needed
+
+            # Your data plotting code
+            ax.bar(bins_grid['Temperature'], bins_grid['Probability'])
+            ax.set_xlabel('Temperature', fontsize=8)  # Adjust fontsize as needed
+            ax.set_ylabel('Probability', fontsize=8)  # Adjust fontsize as needed
+            ax.set_title("Probability Distribution over Tomorrow's Temperatures", fontsize=9)  # Adjust fontsize as needed
+            ax.set_xticks(df['Temperature'])
+            ax.set_xticklabels(df['Temperature'], fontsize=6)  # Adjust fontsize as needed
+            ax.set_yticks(df['Probability'])
+            ax.set_yticklabels(df['Probability'], fontsize=7)
+            plt.tight_layout()
+
+            # Adjust the title and labels proportions
+            fig.subplots_adjust(top=0.9, right=0.95)  # Adjust the values as needed
+
+            st.pyplot(fig, use_container_width=False)
+
+    
+            '''
+            # Adjust the title, labels, and plot proportions
+            fig.subplots_adjust(top=0.9, right=0.95)  # Adjust the values as needed
+
+            
+
+            plt.rcParams['figure.figsize'] = [4, 3]
+
             fig, ax = plt.subplots()
             ax.bar(bins_grid['Temperature'], bins_grid['Probability'])
             ax.set_xlabel('Temperature')
             ax.set_ylabel('Probability')
-            ax.set_title('Probability Distribution over Tomorrow\'s Temperatures')
+            ax.set_title('Probability Distribution over Tomorrow\'s Temperatures', )
+            ax.title.set_size(8)
             plt.tight_layout()
             st.pyplot(fig, use_container_width=True)
-
+            '''
     st.write(CAPTION_INSTRUCTIONS)
 
 def first_question():
@@ -143,7 +171,7 @@ def first_question_grid():
     data_container = st.container()
 
     with data_container:
-        table, plot = st.columns(2)
+        table, plot = st.columns([0.4, 0.6], gap = "large")
         with table:
 
             # Set up Ag-Grid options
@@ -177,8 +205,24 @@ def first_question_grid():
                 st.write(f'**:red[You have inserted {abs(percentage_difference)} percent more, please review your percentage distribution.]**')
 
         with plot:
+            fig, ax = plt.subplots(figsize=(8, 6))  # Adjust the figure size as needed
+
+            # Your data plotting code
+            ax.bar(bins, bins_grid['Percentage'])
+            ax.set_xlabel('Probability Bins', fontsize=14)  # Adjust fontsize as needed
+            ax.set_ylabel('Percentage of Beliefs', fontsize=14)  # Adjust fontsize as needed
+            ax.set_title('Distribution of Beliefs about the Impact on the Number of Products that Firms Export', fontsize=16)  # Adjust fontsize as needed
+            ax.set_xticks(bins)
+            ax.set_xticklabels(bins, rotation=80, fontsize=10)  # Adjust fontsize as needed
+
+            plt.tight_layout()
+
+            # Adjust the title, labels, and plot proportions
+            fig.subplots_adjust(top=0.9, right=0.95)  # Adjust the values as needed
+
+            st.pyplot(fig, use_container_width=True)
         # Display the distribution of probabilities with a bar chart 
-        
+            '''      
             fig, ax = plt.subplots()
             ax.bar(bins, bins_grid['Percentage'])
             ax.set_xlabel('Probability Bins')
@@ -188,7 +232,7 @@ def first_question_grid():
             ax.set_xticklabels(bins, rotation=80)
             plt.tight_layout()
             st.pyplot(fig, use_container_width=True)
-
+            '''
     new_bins_df = pd.DataFrame(bins_grid.T)
 
 
