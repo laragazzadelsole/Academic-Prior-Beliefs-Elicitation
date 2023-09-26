@@ -5,7 +5,6 @@ from constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
-import seaborn as sns
 from google.oauth2 import service_account
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -79,6 +78,7 @@ def instructions_table():
         with table:
             # Create Streamlit app
             st.subheader("Temperature Forecast Tomorrow in Your City")
+            st.write('Please scroll on the table to see all available options.')
 
             # Define Ag-Grid options
             gb = GridOptionsBuilder()
@@ -105,6 +105,7 @@ def instructions_table():
             # Initialize Ag-Grid
             grid_return = AgGrid(df, gridOptions=gb.build(), height=400, fit_columns_on_grid_load=True)
             bins_grid = grid_return["data"]
+        
         with plot:
         # Display the distribution of probabilities with a bar chart 
             fig, ax = plt.subplots(figsize=(4, 3))  # Adjust the figure size as needed
@@ -125,24 +126,6 @@ def instructions_table():
 
             st.pyplot(fig, use_container_width=False)
 
-    
-            '''
-            # Adjust the title, labels, and plot proportions
-            fig.subplots_adjust(top=0.9, right=0.95)  # Adjust the values as needed
-
-            
-
-            plt.rcParams['figure.figsize'] = [4, 3]
-
-            fig, ax = plt.subplots()
-            ax.bar(bins_grid['Temperature'], bins_grid['Probability'])
-            ax.set_xlabel('Temperature')
-            ax.set_ylabel('Probability')
-            ax.set_title('Probability Distribution over Tomorrow\'s Temperatures', )
-            ax.title.set_size(8)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            '''
     st.write(CAPTION_INSTRUCTIONS)
 
 def first_question():
@@ -150,10 +133,12 @@ def first_question():
     st.write(SUBTITLE_QUESTION_1)
 
 
-
 def first_question_grid():
-    st.write('BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT')
+    st.write('''BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT \\
+             Please scroll on the table to see all available options.
+            ''')
 
+        
         
     # Downloading the csv file from your GitHub account
 
@@ -222,19 +207,8 @@ def first_question_grid():
 
             st.pyplot(fig, use_container_width=True)
         # Display the distribution of probabilities with a bar chart 
-            '''      
-            fig, ax = plt.subplots()
-            ax.bar(bins, bins_grid['Percentage'])
-            ax.set_xlabel('Probability Bins')
-            ax.set_ylabel('Percentage of Beliefs')
-            ax.set_title('Distribution of Beliefs about the Impact on the Number of Products that Firms Export')
-            ax.set_xticks(bins)
-            ax.set_xticklabels(bins, rotation=80)
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
-            '''
-    new_bins_df = pd.DataFrame(bins_grid.T)
 
+    new_bins_df = pd.DataFrame(bins_grid.T)
 
     return new_bins_df, fig, bins_grid
 
@@ -283,7 +257,7 @@ def add_submission(new_bins_df):
     #st.success('Data has been saved successfully.')
     
     #Navigate to the folder in Google Drive. Copy the Folder ID found in the URL. This is everything that comes after “folder/” in the URL. For example, if the URL was
-    backup_sheet = client.create(f'Backup_{datetime.now()}', folder_id='1Pjz6JAf9MaVe_eSaAFpDhLFr4GMPj2jX').sheet1
+    backup_sheet = client.create(f'Backup_{datetime.now()}_{data[USER_FULL_NAME]}', folder_id='1Pjz6JAf9MaVe_eSaAFpDhLFr4GMPj2jX').sheet1
     backup_sheet = backup_sheet.append_rows(new_bins_df.iloc[:2].values.tolist())
     #backup_sheet.share('sara.gironi97@gmail.com', perm_type = 'user', role = 'writer')
     
