@@ -134,11 +134,8 @@ def first_question():
 
 
 def first_question_grid():
-    st.write('''BELIEFS ABOUT THE IMPACT ON THE NUMBER OF PRODUCTS THAT FIRMS EXPORT \\
-             Please scroll on the table to see all available options.
-            ''')
-
-        
+    st.subheader('Beliefs about the Impact on the Numbeer of Products that Firms Export')
+    st.write('Please scroll on the table to see all available options.')
         
     # Downloading the csv file from your GitHub account
 
