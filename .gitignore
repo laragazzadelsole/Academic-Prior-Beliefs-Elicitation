@@ -162,3 +162,5 @@ cython_debug/
 secrets.toml
 
 prior-beliefs-elicitation-keys.json
+
+.prior_beliefs

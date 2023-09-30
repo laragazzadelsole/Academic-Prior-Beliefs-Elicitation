@@ -34,19 +34,7 @@ if st.session_state['consent']:
 
     st.write(SUBTITLE_QUESTION_1_2)
     st.number_input('Click to increase or decrease the counter.', min_value=0, max_value=10000, key = 'input_question_1')
-    
-
-    
-    #st.radio(EXPORT_IMPACT_DESCRIPTION, options=["Positive", "Negative", "No changes"], horizontal=False, key = 'export_impact')
-
-    #percentage_of_expected_impact(st.session_state.export_impact)
-    #probability_of_expected_impact(st.session_state.export_impact)
-    #motivation()
-
-    #if st.session_state.export_impact == "Positive":
-    #    st.radio("Select one of the following options", options = ["Diversify the range of products exported", "Diversify the destinations of exportation", "All of the above"], key = 'export_outcome')
-
-    
+        
     submit = st.button("Submit", on_click = add_submission, args = (new_bins_df, ))
 
     if st.session_state['submit']:
