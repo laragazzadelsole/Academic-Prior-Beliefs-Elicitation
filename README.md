@@ -1,1 +1,1 @@
-# Test branch for Academic Prior Beliefs Elicitation 
+# Academic Prior Beliefs Elicitation
