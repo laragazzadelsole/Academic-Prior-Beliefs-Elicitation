@@ -133,13 +133,21 @@ def first_question():
     st.write(SUBTITLE_QUESTION_1)
 
 
-def first_question_grid(bins_df, bins):
+def first_question_grid():
     st.subheader('Beliefs about the Impact on the Number of Products that Firms Export')
     st.write('Please scroll on the table to see all available options.')
         
     # Downloading the csv file from your GitHub account
 
+    url = "https://raw.githubusercontent.com/laragazzadelsole/Academic-Prior-Beliefs-Elicitation/dev2/probability_bins.csv" 
+    download = requests.get(url).content
 
+    # Reading the downloaded content and turning it into a pandas dataframe
+
+    bins_df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+    #bins_df = pd.read_csv('probability_bins.csv', header = 0)
+    
+    bins = bins_df['Probability']
 
     data_container = st.container()
 

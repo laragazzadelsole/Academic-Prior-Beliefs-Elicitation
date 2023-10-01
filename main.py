@@ -28,18 +28,7 @@ if st.session_state['consent']:
 
     first_question()
 
-    url = "https://raw.githubusercontent.com/laragazzadelsole/Academic-Prior-Beliefs-Elicitation/dev2/probability_bins.csv" 
-    download = requests.get(url).content
-
-    # Reading the downloaded content and turning it into a pandas dataframe
-
-    bins_df = pd.read_csv(io.StringIO(download.decode('utf-8')))
-    #bins_df = pd.read_csv('probability_bins.csv', header = 0)
-    
-    bins = bins_df['Probability']
-    st.write(bins)
-
-    new_bins_df, fig, bins_grid = first_question_grid(bins_df, bins) 
+    new_bins_df, fig, bins_grid = first_question_grid() 
 
     #table_graph_position(bins_grid, fig)
 
